@@ -209,7 +209,7 @@ var sendSlackRequest = func(request *http.Request, logger log.Logger) error {
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			logger.Warn("Failed to close response body", "err", err)
+			logger.Info("Failed to close response body", "err", err)
 		}
 	}()
 
@@ -218,8 +218,13 @@ var sendSlackRequest = func(request *http.Request, logger log.Logger) error {
 		return fmt.Errorf("failed to read response body: %w", err)
 	}
 
+<<<<<<< HEAD
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		logger.Warn("Slack API request failed", "url", request.URL.String(), "statusCode", resp.Status, "body", string(body))
+=======
+	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
+		logger.Info("Slack API request failed", "url", request.URL.String(), "statusCode", resp.Status, "body", string(body))
+>>>>>>> d2172dd8a8 (keep the warn and crit in the interface, but stop using it in xorm)
 		return fmt.Errorf("request to Slack API failed with status code %d", resp.StatusCode)
 	}
 
@@ -228,6 +233,7 @@ var sendSlackRequest = func(request *http.Request, logger log.Logger) error {
 		Ok  bool   `json:"ok"`
 		Err string `json:"error"`
 	}{}
+<<<<<<< HEAD
 	if err := json.Unmarshal(body, &rslt); err != nil {
 		logger.Warn("Failed to unmarshal Slack API response", "url", request.URL.String(), "statusCode", resp.Status,
 			"body", string(body))
@@ -238,6 +244,14 @@ var sendSlackRequest = func(request *http.Request, logger log.Logger) error {
 		logger.Warn("Sending Slack API request failed", "url", request.URL.String(), "statusCode", resp.Status,
 			"err", rslt.Err)
 		return fmt.Errorf("failed to make Slack API request: %s", rslt.Err)
+=======
+	if err := json.Unmarshal(body, &rslt); err == nil {
+		if !rslt.Ok && rslt.Err != "" {
+			logger.Info("Sending Slack API request failed", "url", request.URL.String(), "statusCode", resp.Status,
+				"err", rslt.Err)
+			return fmt.Errorf("failed to make Slack API request: %s", rslt.Err)
+		}
+>>>>>>> d2172dd8a8 (keep the warn and crit in the interface, but stop using it in xorm)
 	}
 
 	logger.Debug("Sending Slack API request succeeded", "url", request.URL.String(), "statusCode", resp.Status)
