@@ -116,8 +116,9 @@ export class Scene {
       return;
     }
 
-    const w = element.parent?.width ?? 100;
-    const h = element.parent?.height ?? 100;
+    const parentPlacement = element.parent?.placement;
+    const w = parentPlacement?.width ?? 100;
+    const h = parentPlacement?.height ?? 100;
 
     // Get computed position....
     const info = div.getBoundingClientRect(); // getElementInfo(div, element.parent?.div);

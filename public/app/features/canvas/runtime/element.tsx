@@ -26,8 +26,6 @@ export class ElementState {
   div?: HTMLDivElement;
 
   // Calculated
-  width = 100;
-  height = 100;
   data?: any; // depends on the type
 
   // TODO: options.anchor/options.placement are also modified in validatePlacement. Is this intended?
@@ -94,9 +92,6 @@ export class ElementState {
       delete placement.left;
     }
 
-    this.width = w;
-    this.height = h;
-
     this.options.anchor = this.anchor;
     this.options.placement = this.placement;
 
@@ -106,8 +101,6 @@ export class ElementState {
   // The parent size, need to set our own size based on offsets
   updateSize(width: number, height: number) {
     // TODO: width and height are set at the end of `validatePlacement`, should we set them here as well?
-    this.width = width;
-    this.height = height;
 
     this.placement.width = width;
     this.placement.height = height;
@@ -290,15 +283,20 @@ export class ElementState {
       }
     }
 
-    this.width = event.width;
-    this.height = event.height;
+    this.placement.width = event.width;
+    this.placement.height = event.height;
   };
 
   render() {
     const { item } = this;
     return (
       <div key={`${this.UID}/${this.revId}`} style={{ ...this.sizeStyle, ...this.dataStyle }} ref={this.initElement}>
-        <item.display config={this.options.config} width={this.width} height={this.height} data={this.data} />
+        <item.display
+          config={this.options.config}
+          width={this.placement.width!}
+          height={this.placement.height!}
+          data={this.data}
+        />
       </div>
     );
   }

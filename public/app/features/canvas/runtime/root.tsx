@@ -13,8 +13,8 @@ export class RootElement extends GroupState {
   // The parent size is always fullsize
   updateSize(width: number, height: number) {
     super.updateSize(width, height);
-    this.width = width;
-    this.height = height;
+    this.placement.width = width;
+    this.placement.height = height;
     this.sizeStyle.width = width;
     this.sizeStyle.height = height;
   }

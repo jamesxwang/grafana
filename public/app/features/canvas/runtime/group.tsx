@@ -50,15 +50,15 @@ export class GroupState extends ElementState {
   updateSize(width: number, height: number) {
     super.updateSize(width, height);
     if (!this.parent) {
-      this.width = width;
-      this.height = height;
+      this.placement.width = width;
+      this.placement.height = height;
       this.sizeStyle.width = width;
       this.sizeStyle.height = height;
     }
 
     // Update children with calculated size
     for (const elem of this.elements) {
-      elem.updateSize(this.width, this.height);
+      elem.updateSize(width, height);
     }
 
     // The group forced to full width (for now)
@@ -110,7 +110,7 @@ export class GroupState extends ElementState {
         }
         console.log('DUPLICATE', opts);
         const copy = new ElementState(element.item, opts, this);
-        copy.updateSize(element.width, element.height);
+        copy.updateSize(element.placement.width!, element.placement.height!);
         copy.updateData(element.data); // :bomb:  <-- need some way to tell the scene to re-init size and data
         this.elements.push(copy);
         break;
