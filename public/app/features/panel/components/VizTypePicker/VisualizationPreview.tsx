@@ -34,9 +34,15 @@ export function VisualizationPreview({ data, suggestion, onChange, width, showTi
   }
 
   return (
-    <div onClick={onClick} data-testid={selectors.components.VisualizationPreview.card(suggestion.name)}>
+    <div>
       {showTitle && <div className={styles.name}>{suggestion.name}</div>}
-      <div className={styles.vizBox} style={outerStyles}>
+      <button
+        aria-label={suggestion.name}
+        className={styles.vizBox}
+        data-testid={selectors.components.VisualizationPreview.card(suggestion.name)}
+        style={outerStyles}
+        onClick={onClick}
+      >
         <Tooltip content={suggestion.name}>
           <div style={innerStyles} className={styles.renderContainer}>
             <PanelRenderer
@@ -51,7 +57,7 @@ export function VisualizationPreview({ data, suggestion, onChange, width, showTi
             <div className={styles.hoverPane} />
           </div>
         </Tooltip>
-      </div>
+      </button>
     </div>
   );
 }
@@ -68,8 +74,10 @@ const getStyles = (theme: GrafanaTheme2) => {
     }),
     vizBox: css`
       position: relative;
+      background: none;
       border-radius: ${theme.shape.borderRadius(1)};
       cursor: pointer;
+      text-align: left;
       border: 1px solid ${theme.colors.border.strong};
 
       transition: ${theme.transitions.create(['background'], {
